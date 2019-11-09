@@ -31,6 +31,11 @@ body {
   font-size: 23px;
   color: rgb(61, 11, 126);
   height: 100vh;
+  background-image: url('/images/pokemon-minimalistic.jpg');
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 li, ol, ul {
@@ -43,6 +48,7 @@ h2 {
   text-transform: uppercase;
   font-size: var(--font-size-large);
   margin: 0;
+  text-shadow: 1px 1px 4px white;
 }
 
 h1 {

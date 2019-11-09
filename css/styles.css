@@ -177,6 +177,9 @@ button {
   right: 0;
   border-radius: 5px;
 }
+#overlay.is-not-visible {
+  display: none;
+}
 
 .title {
   color: #FFF;

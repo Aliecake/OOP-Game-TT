@@ -8,6 +8,7 @@
 	*/
 let game;
 let phrases = new Phrase();
+const regex = /[^0-9a-z\s]/i;
 
 document.getElementById('btn__reset').addEventListener('click', () => {
 	
@@ -16,24 +17,30 @@ document.getElementById('btn__reset').addEventListener('click', () => {
 });
 
 document.addEventListener('keyup', (e) => {
-	game.interaction(e.key);
+	if(!regex.test(e.key)){
+		game.interaction(e.key);
+	}
 });
 
 //called by start
 function displayBoard(game) {
+	
 	game.phrase.split('').forEach(letter => {
+		
 		if(letter === ' '){
-			phrases.createElement(`li`, `space`, `phrase`, letter, 1);
+			phrases.createElement(`li`, `space`, `phrase`, ' ', 1);
+		} else if (regex.test(letter)){
+			phrases.createElement(`li`, `none`, `phrase`, letter, 1, letter);
 		} else {
-			phrases.createElement(`li`, `letter`, `phrase`, letter, 1);
+			phrases.createElement(`li`, `letter`, `phrase`, letter, 1, letter);
 		}
 		
 	});
 }
 
 
-function killOverlay() {
-	document.getElementById('overlay').style.display = 'none';
+function overlayToggle() {
+	document.getElementById('overlay').classList.toggle('is-not-visible');
 }
 
 

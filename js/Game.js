@@ -13,28 +13,47 @@
        this.phrase = this.getPhrase();
        this.lives = 5;
        this.win = false;
+       this.correctGuess = false;
     }
     //methods
     start() {
-        killOverlay();
+        overlayToggle();
         displayBoard(this);
     }
     end() {
-        //lost/out of lives
+        if(this.lives === 0){
+            phrases.createElement(`div`, `lose`, `overlay`, `You Lost! Try again`, 3);
+            overlayToggle();
+        } else {
+            this.winCheck();
+        }
     }
     getPhrase() {
         //get random phrase
        return this.random(this.phrases);
     }
     interaction(guess) {
-        
-        this.guess = guess;
-        // console.log(guess)
-        console.log(this.guess, this.phrase)
-
+        this.correctGuess = false;
+        this.phrase.split('').forEach(letter => {
+            if(guess.toLowerCase() === letter.toLowerCase()) {
+                this.correctGuess = true;
+                //correct highlighting
+                //TODO move to phrase class?
+                document.querySelectorAll(`.${letter}`).forEach(el => {
+                    el.style.color = `rgb(61, 11, 126)`;
+                    el.style.setProperty(`background`, `var(--color-vibrant-light)`)
+            });
+            }
+        });
+        this.killLife();
     }
     killLife() {
         //remove a life
+        if(!this.correctGuess){
+            this.lives -= 1;
+            //TODO phrase class highlight
+        }
+        this.end();
     }
     winCheck() {
         //check if phrase complete

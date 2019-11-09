@@ -9,21 +9,22 @@
     //create phrases
     constructor() {
         this.list = [
-            `wild rattata appeared!`,
-            `i choose you, pikachu!`,
-            `squirtle squad`,
-            `it's super effective`,
-            `magikarp used flail`,
-            `not very effective`,
+            `Wild Rattata Appeared!`,
+            `I choose you, Pikachu!`,
+            `Squirtle Squad`,
+            `It's super effective`,
+            `Magikarp used flail`,
+            `Not very effective`,
           ]
 
     }
    //create an element on page, add class, append - multi use
-    createElement(el, _class, parent, char, nodenum = 0) {
+   createElement(el, _class, parent, text, nodenum = 0, char = ` `) {
         this.node = document.createElement(`${el}`);
-        this.textnode = document.createTextNode(char);
-	    this.node.classList.add(`${_class}`);
+        this.textnode = document.createTextNode(text);
+        this.node.classList.add(`${_class}`, `${char}`);
         this.node.appendChild(this.textnode);
+        console.log(this.node, this.textnode, _class, char, nodenum)
 	    document.getElementById(`${parent}`).childNodes[nodenum].appendChild(this.node);
     }
 

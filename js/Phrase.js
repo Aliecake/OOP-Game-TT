@@ -24,7 +24,6 @@
         this.textnode = document.createTextNode(text);
         this.node.classList.add(`${_class}`, `${char}`);
         this.node.appendChild(this.textnode);
-        console.log(this.node, this.textnode, _class, char, nodenum)
 	    document.getElementById(`${parent}`).childNodes[nodenum].appendChild(this.node);
     }
 

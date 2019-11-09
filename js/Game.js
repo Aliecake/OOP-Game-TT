@@ -14,6 +14,7 @@
        this.lives = 5;
        this.win = false;
        this.correctGuess = false;
+       this.active = true;
     }
     //methods
     start() {
@@ -21,10 +22,14 @@
         displayBoard(this);
     }
     end() {
-        if(this.lives === 0){
+        if(this.lives === 0 && this.active){
             phrases.createElement(`div`, `lose`, `overlay`, `You Lost! Try again`, 3);
+            //prevent overlay from toggling on keypress
+            this.active = false;
             overlayToggle();
+            this.reset();
         } else {
+            
             this.winCheck();
         }
     }
@@ -42,7 +47,7 @@
                 document.querySelectorAll(`.${letter}`).forEach(el => {
                     el.style.color = `rgb(61, 11, 126)`;
                     el.style.setProperty(`background`, `var(--color-vibrant-light)`)
-            });
+                });
             }
         });
         this.killLife();
@@ -58,7 +63,17 @@
     winCheck() {
         //check if phrase complete
     }
-    random() {
-        return this.phrases[Math.floor(Math.random() * this.phrases.length)]
+
+    random(list) {
+        return list[Math.floor(Math.random() * list.length)]
+    }
+    
+    reset() {
+        this.active = true;
+        //TODO reset h2
+        document.querySelectorAll('.letter').forEach(el => {
+            el.removeAttribute(`style`);
+        });
+        
     }
  }

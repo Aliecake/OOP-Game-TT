@@ -9,10 +9,11 @@
   --color-start: #5b85b7;
   --color-neutral: #445069;
   --color-neutral-light: #D2D2D2;
+  --color-vibrant-light: rgb(49, 219, 197);
   --color-keys: #37474F;
   --color-keys-light: #E5E5E5;
   --font-size-large: 60px;
-  --font-size-medium: 20px;
+  --font-size-medium: 23px;
   --transition: all .2s ease-in-out;
 }
 
@@ -27,6 +28,8 @@ body {
   justify-content: space-evenly;
   flex-direction: column;
   display: flex;
+  font-size: 23px;
+  color: rgb(61, 11, 126);
   height: 100vh;
 }
 

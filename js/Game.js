@@ -12,9 +12,10 @@
        this.phrases = phrases;
        this.phrase = this.getPhrase();
        this.lives = 5;
-       this.win = false;
+       this.guessedLetters = [];
        this.correctGuess = false;
        this.active = true;
+       this.win = false;
     }
     //methods
     start() {
@@ -28,7 +29,6 @@
         overlayToggle();
     }
     getPhrase() {
-        //get random phrase
        return this.random(this.phrases);
     }
     interaction(guess) {
@@ -46,6 +46,7 @@
     killLife() {
         //remove a life
         if(!this.correctGuess) {
+            document.querySelectorAll('.tries img')[this.lives - 1].setAttribute(`src`, `images/lostHeart.png`);
             this.lives -= 1;
         }
         if(this.lives === 0 && this.active) {
@@ -53,6 +54,15 @@
         }
     }
     winCheck() {
+       
+        this.filteredPhrase = this.phrase.split('').filter((letter) => {
+            return !phrases.regex.test(letter);
+        });
+
+        if (this.filteredPhrase.length === document.querySelectorAll(`.show`).length){
+            phrases.createElement(`div`, `win`, `overlay`, `You Won! Play again?`, 3);
+            overlayToggle();
+        }
         //check if phrase complete
        // console.log(document.querySelectorAll('.letter'))
     }

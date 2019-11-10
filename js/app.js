@@ -8,17 +8,17 @@
 	*/
 let game;
 let phrases = new Phrase();
-const regex = /[^A-Za-z]/;
 
 document.getElementById('btn__reset').addEventListener('click', () => {
-	console.log(`New Game`)
 	game = new Game(phrases.list);
 	game.reset();
 	game.start();
 });
 
 document.addEventListener('keyup', (e) => {
-	if(!regex.test(e.key) && game && e.key.length === 1){
+	//checks if letter, game is defined, key is 1 char, and that key has not been previously guessed
+	if(!phrases.regex.test(e.key) && game && e.key.length === 1 && !game.guessedLetters.includes(e.key)){
+		game.guessedLetters.push(e.key);
 		game.interaction(e.key);
 	}
 });
@@ -27,11 +27,10 @@ document.addEventListener('keyup', (e) => {
 function displayBoard(game) {
 
 	game.phrase.split('').forEach(letter => {
-
 		if(letter === ' '){
-			phrases.createElement(`li`, `space`, `phrase`, ' ', 1);
-		} else if (regex.test(letter)){
-			phrases.createElement(`li`, `none`, `phrase`, letter, 1, letter);
+			phrases.createElement(`li`, `space`, `phrase`, ` `, 1);
+		} else if (phrases.regex.test(letter)){
+			phrases.createElement(`li`, `none`, `phrase`, letter, 1);
 		} else {
 			phrases.createElement(`li`, `letter`, `phrase`, letter, 1, letter);
 		}

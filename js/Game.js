@@ -57,6 +57,8 @@
         this.filteredPhrase = this.phrase.split('').filter((letter) => {
             return !phrases.regex.test(letter);
         });
+        console.log(document.getElementsByClassName(`show`).length, this.filteredPhrase.length)
+        console.log(document.getElementsByClassName(`show`), this.filteredPhrase)
         if (this.filteredPhrase.length - 1 === document.getElementsByClassName(`show`).length){
             phrases.createElement(`div`, `win`, `overlay`, `You Won! Play again?`, 3);
             this.active = false;

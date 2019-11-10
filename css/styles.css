@@ -30,7 +30,7 @@ body {
   font-size: 23px;
   color: rgb(61, 11, 126);
   height: 100vh;
-  background-image: url('images/pokemon-minimalistic.jpg');
+  background-image: url('../images/pokemon-minimalistic.jpg');
   background-size: cover;
 }
 

@@ -26,6 +26,10 @@
         this.node.appendChild(this.textnode);
 	    document.getElementById(`${parent}`).childNodes[nodenum].appendChild(this.node);
     }
-
+    letterHighlight(letter) {
+        document.querySelectorAll(`.${letter}`).forEach(el => {
+            el.classList.add(`show`);
+        });
+    }
 
  }

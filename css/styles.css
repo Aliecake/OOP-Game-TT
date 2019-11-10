@@ -9,7 +9,6 @@
   --color-start: #5b85b7;
   --color-neutral: #445069;
   --color-neutral-light: #D2D2D2;
-  --color-vibrant-light: rgb(49, 219, 197);
   --color-keys: #37474F;
   --color-keys-light: #E5E5E5;
   --font-size-large: 60px;
@@ -32,9 +31,6 @@ body {
   color: rgb(61, 11, 126);
   height: 100vh;
   background-image: url('/images/pokemon-minimalistic.jpg');
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
   background-size: cover;
 }
 

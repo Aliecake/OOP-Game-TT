@@ -8,15 +8,12 @@
  class Phrase {
     //create phrases
     constructor() {
-        this.list = [
-            `Wild Rattata Appeared!`,
-            `I choose you, Pikachu!`,
-            `Squirtle Squad`,
-            `It's super effective`,
-            `Magikarp used flail`,
-            `Not very effective`,
-          ];
-          this.regex = /[^A-Za-z]/;
+       
+        this.activePhrase = null;
+        this.regex = /[^A-Za-z]/;
+
+    }
+    addPhraseToDisplay() {
 
     }
    //create an element on page, add class, append - multi use

@@ -8,18 +8,27 @@
   *  checking for a win, and removing a life from the scoreboard.
   */
  class Game {
-    constructor(phrases) {
-       this.phrases = phrases;
-       this.phrase = this.getPhrase();
-       this.lives = 5;
+    constructor() {
+        //phrases list should be moves here. because f*ck you
+       this.phrases = [
+        `Wild Rattata Appeared!`,
+        `I choose you, Pikachu!`,
+        `Squirtle Squad`,
+        `It's super effective`,
+        `Magikarp used flail`,
+        `Not very effective`,
+      ];
+       this.missed = 0;
        this.guessedLetters = [];
        this.correctGuess = false;
        this.active = true;
        this.win = false;
     }
     //methods
-    start() {
+    startGame() {
         overlayToggle();
+        //rename activePhrase
+        phrase.activePhrase = this.getRandomPhrase(this.phrases);
         displayBoard(this);
     }
     end() {
@@ -28,13 +37,10 @@
         this.active = false;
         overlayToggle();
     }
-    getPhrase() {
-       return this.random(this.phrases);
-    }
-    interaction(guess) {
+    handleInteraction(guess) {
         this.correctGuess = false;
         this.winCheck();
-        this.phrase.split('').forEach(letter => {
+        phrase.activePhrase.split('').forEach(letter => {
             if(guess.toLowerCase() === letter.toLowerCase()) {
                 this.correctGuess = true;
                 //correct guess highlighting
@@ -45,20 +51,20 @@
     }
     killLife() {
         //remove a life
-        if(!this.correctGuess && this.lives > 0) {
-            document.querySelectorAll('.tries img')[this.lives - 1].setAttribute(`src`, `images/lostHeart.png`);
-            this.lives -= 1;
+        if(!this.correctGuess && this.missed < 5) {
+            document.querySelectorAll('.tries img')[this.missed].setAttribute(`src`, `images/lostHeart.png`);
+            this.missed += 1;
         }
-        if(this.lives === 0 && this.active) {
+        if(this.missed === 5 && this.active) {
             this.end();
         }
     }
     winCheck() {
-        this.filteredPhrase = this.phrase.split('').filter((letter) => {
+        this.filteredPhrase = phrase.activePhrase.split('').filter((letter) => {
             return !phrases.regex.test(letter);
         });
-        console.log(document.getElementsByClassName(`show`).length, this.filteredPhrase.length)
-        console.log(document.getElementsByClassName(`show`), this.filteredPhrase)
+
+
         if (this.filteredPhrase.length - 1 === document.getElementsByClassName(`show`).length){
             phrases.createElement(`div`, `win`, `overlay`, `You Won! Play again?`, 3);
             this.active = false;
@@ -66,7 +72,7 @@
         }
     }
     //reusable random
-    random(list) {
+    getRandomPhrase(list) {
         return list[Math.floor(Math.random() * list.length)];
     }
     //remove li's & game over message

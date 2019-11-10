@@ -15,10 +15,12 @@
             `It's super effective`,
             `Magikarp used flail`,
             `Not very effective`,
-          ]
+          ];
+          this.regex = /[^A-Za-z]/;
 
     }
    //create an element on page, add class, append - multi use
+   //**NOTE: Below default is its alt+255. Spaces are not valid tokens*/
    createElement(el, _class, parent, text, nodenum = 0, char = ` `) {
         this.node = document.createElement(`${el}`);
         this.textnode = document.createTextNode(text);

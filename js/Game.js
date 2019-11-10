@@ -45,7 +45,7 @@
     }
     killLife() {
         //remove a life
-        if(!this.correctGuess) {
+        if(!this.correctGuess && this.lives > 0) {
             document.querySelectorAll('.tries img')[this.lives - 1].setAttribute(`src`, `images/lostHeart.png`);
             this.lives -= 1;
         }
@@ -54,19 +54,16 @@
         }
     }
     winCheck() {
-       
         this.filteredPhrase = this.phrase.split('').filter((letter) => {
             return !phrases.regex.test(letter);
         });
-
-        if (this.filteredPhrase.length === document.querySelectorAll(`.show`).length){
+        if (this.filteredPhrase.length - 1 === document.getElementsByClassName(`show`).length){
             phrases.createElement(`div`, `win`, `overlay`, `You Won! Play again?`, 3);
+            this.active = false;
             overlayToggle();
         }
-        //check if phrase complete
-       // console.log(document.querySelectorAll('.letter'))
     }
-
+    //reusable random
     random(list) {
         return list[Math.floor(Math.random() * list.length)];
     }
@@ -78,6 +75,8 @@
             if(!el.classList.contains('tries')) {
                 el.classList.remove(`show`);
                 el.parentNode.removeChild(el);
+            } else {
+                document.querySelectorAll('.tries img').forEach(element => element.setAttribute(`src`, `images/liveHeart.png`));
             }
         });
     }

@@ -22,16 +22,10 @@
         displayBoard(this);
     }
     end() {
-        if(this.lives === 0 && this.active){
-            phrases.createElement(`div`, `lose`, `overlay`, `You Lost! Try again`, 3);
-            //prevent overlay from toggling on keypress
-            this.active = false;
-            overlayToggle();
-            this.reset();
-        } else {
-            
-            this.winCheck();
-        }
+        phrases.createElement(`div`, `lose`, `overlay`, `You Lost! Try again`, 3);
+        //prevent overlay from toggling on keypress
+        this.active = false;
+        overlayToggle();
     }
     getPhrase() {
         //get random phrase
@@ -39,41 +33,42 @@
     }
     interaction(guess) {
         this.correctGuess = false;
+        this.winCheck();
         this.phrase.split('').forEach(letter => {
             if(guess.toLowerCase() === letter.toLowerCase()) {
                 this.correctGuess = true;
-                //correct highlighting
-                //TODO move to phrase class?
-                document.querySelectorAll(`.${letter}`).forEach(el => {
-                    el.style.color = `rgb(61, 11, 126)`;
-                    el.style.setProperty(`background`, `var(--color-vibrant-light)`)
-                });
+                //correct guess highlighting
+                phrases.letterHighlight(letter);
             }
         });
         this.killLife();
     }
     killLife() {
         //remove a life
-        if(!this.correctGuess){
+        if(!this.correctGuess) {
             this.lives -= 1;
-            //TODO phrase class highlight
         }
-        this.end();
+        if(this.lives === 0 && this.active) {
+            this.end();
+        }
     }
     winCheck() {
         //check if phrase complete
+       // console.log(document.querySelectorAll('.letter'))
     }
 
     random(list) {
-        return list[Math.floor(Math.random() * list.length)]
+        return list[Math.floor(Math.random() * list.length)];
     }
-    
+    //remove li's & game over message
     reset() {
         this.active = true;
-        //TODO reset h2
-        document.querySelectorAll('.letter').forEach(el => {
-            el.removeAttribute(`style`);
+        document.getElementById(`game-over-message`).textContent = '';
+        document.querySelectorAll(`li`).forEach(el => {
+            if(!el.classList.contains('tries')) {
+                el.classList.remove(`show`);
+                el.parentNode.removeChild(el);
+            }
         });
-        
     }
  }

@@ -42,7 +42,7 @@
     }
     handleInteraction(guess) {
         this.correctGuess = false;
-        this.winCheck();
+        this.checkForWin();
         
         phrase.activePhrase.split('').forEach(letter => {
             if(guess.toLowerCase() === letter.toLowerCase()) {
@@ -67,11 +67,17 @@
             this.gameOver(false);
         }
     }
-    winCheck() {
+    checkForWin() {
         this.filteredPhrase = phrase.activePhrase.split('').filter((letter) => {
             return !phrase.regex.test(letter);
         });
-        if (this.filteredPhrase.length - 1 === document.getElementsByClassName(`show`).length){
+        this.currentPhrase = document.getElementsByClassName(`show`);
+
+        // this.currentPhrase = document.querySelectorAll(`#phrase li.show`)
+        console.log(this.currentPhrase)
+        console.log(this.currentPhrase.length, this.filteredPhrase.length)
+     
+        if (this.filteredPhrase.length - 1 === this.currentPhrase.length){
             this.gameOver(true);
         }
     }

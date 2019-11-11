@@ -115,9 +115,9 @@ button {
 
 
 .show {
-  color: #fff;
+  color: rgb(61, 11, 126);
   background-color: #4ac0d5;
-  font-size: 20px;
+  font-weight: 900;
   height: 65px;
   width: 65px;
   padding: 20px 1px 0 1px;
@@ -182,7 +182,10 @@ button {
 #overlay.is-not-visible {
   display: none;
 }
-
+.special {
+  font-size: 60px;
+  font-weight: 900;
+}
 .title {
   color: #FFF;
 }

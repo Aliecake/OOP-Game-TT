@@ -7,7 +7,6 @@
 	* event listeners for the start button and onscreen keyboard buttons.
 	*/
 let game;
-let phrase = new Phrase();
 
 document.getElementById('btn__reset').addEventListener('click', () => {
 	game = new Game();
@@ -24,7 +23,7 @@ document.addEventListener('click', (e) => {
 
 document.addEventListener('keyup', (e) => {
 	//checks if letter, game is defined, key is 1 char, and that key has not been previously guessed
-	if(!phrase.regex.test(e.key) && game && e.key.length === 1 && !game.guessedLetters.includes(e.key)){
+	if(!game.activePhrase.regex.test(e.key) && game && e.key.length === 1 && !game.guessedLetters.includes(e.key)){
 		game.guessedLetters.push(e.key);
 		game.handleInteraction(e.key);
 	}

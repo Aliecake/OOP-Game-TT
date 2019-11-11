@@ -8,97 +8,108 @@
   *  checking for a win, and removing a life from the scoreboard.
   */
  class Game {
-    constructor() {
-        //phrases list should be moves here. because f*ck you
-       this.phrases = [
-        `Wild Rattata Appeared!`,
-        `I choose you, Pikachu!`,
-        `Squirtle Squad`,
-        `It's super effective`,
-        `Magikarp used flail`,
-        `Not very effective`,
-      ];
-       this.missed = 0;
-       this.guessedLetters = [];
-       this.correctGuess = false;
-       this.active = true;
-    }
-    //methods
-    startGame() {
-        overlayToggle();
-        //rename activePhrase
-        phrase.activePhrase = this.getRandomPhrase(this.phrases);
-        phrase.addPhraseToDisplay();
-    }
-    gameOver(result) {
-        if(result){
-            phrase.createElement(`div`, `win`, `overlay`, `You Won! Play again?`, 3);
-        } else {
-            phrase.createElement(`div`, `lose`, `overlay`, `You Lost! Play again?`, 3);
-        }
-        //prevent overlay from toggling on keypress
-        this.active = false;
-        overlayToggle();
-    }
-    handleInteraction(guess) {
-        this.correctGuess = false;
-        this.checkForWin();
-        
-        phrase.activePhrase.split('').forEach(letter => {
-            if(guess.toLowerCase() === letter.toLowerCase()) {
-                this.correctGuess = true;
-                //conjoined showMatchedLetter into both right/wrong guess highlighting AND phrase show
-                phrase.showMatchedLetter(letter, letter, `show`);
-                phrase.showMatchedLetter(letter, `key`, `chosen`);
-            }
-        });
+	constructor() {
+		this.phrases = [
+			new Phrase(`Wild Rattata Appeared!`),
+			new Phrase(`I choose you, Pikachu!`),
+			new Phrase(`Squirtle Squad`),
+			new Phrase(`It's super effective`),
+			new Phrase(`Magikarp used flail`),
+			new Phrase(`Not very effective`),
+		];
+		this.activePhrase = null;
+		this.missed = 0;
+		this.guessedLetters = [];
+		this.active = true;
+	}
 
-        this.removeLife(guess);
-    }
-    removeLife(guess) {
-        if(!this.correctGuess && this.missed < 5) {
-            //removal of hearts from right to left
-            document.querySelectorAll('.tries img')[document.querySelectorAll('.tries img').length - this.missed - 1].setAttribute(`src`, `images/lostHeart.png`);
+	//***********METHODS**********//
+	
+	startGame() {
+		overlayToggle();
+		//rename activePhrase
+		this.activePhrase = this.getRandomPhrase(this.phrases);
+		console.log(this.activePhrase.phrase)
+		this.activePhrase.addPhraseToDisplay();
+	}
+	/**
+	 *
+	 * @param {boolean} gameWon
+	 */
+	gameOver(gameWon) {
+		if(gameWon){
+			this.activePhrase.createElement(`div`, `win`, `overlay`, `You Won! Play again?`, 3);
+		} else {
+			this.activePhrase.createElement(`div`, `lose`, `overlay`, `You Lost! Play again?`, 3);
+		}
+		//prevent overlay from adding multiple win/loss messages on keypress between games
+		this.active = false;
+		overlayToggle();
+	}
+	/**
+	 *
+	 * @param {string} letter
+	 */
+	handleInteraction(letter) {
+		if (this.activePhrase.checkLetter(letter)) {
+			this.activePhrase.showMatchedLetter(letter, `letter.${letter}`, `show`);
+			this.activePhrase.showMatchedLetter(letter, `key`, `chosen`);
+		} else {
+			this.removeLife(letter);
+		}
+		this.checkForWin();
+	}
+	/**
+	 *
+	 * @param {string} guess
+	 */
+	removeLife(guess) {
+		if(this.missed >= 0) {
+			//removal of hearts from right to left
+			document.querySelectorAll('.tries img')[document.querySelectorAll('.tries img').length - this.missed - 1].setAttribute(`src`, `images/lostHeart.png`);
 
-            phrase.showMatchedLetter(guess, `key`, `wrong`);
-            this.missed += 1;
-        }
-        if(this.missed === 5 && this.active) {
-            this.gameOver(false);
-        }
-    }
-    checkForWin() {
-        this.filteredPhrase = phrase.activePhrase.split('').filter((letter) => {
-            return !phrase.regex.test(letter);
-        });
-        this.currentPhrase = document.getElementsByClassName(`show`);
+			this.activePhrase.showMatchedLetter(guess, `key`, `wrong`);
+			this.missed += 1;
+		}
+	}
+	/**
+	 * @return {boolean}
+	 */
+	checkForWin() {
+		if (this.missed === 5 && this.active) {
+			return this.gameOver(false);
+		}
+		this.filteredPhrase = this.activePhrase.phrase.split('').filter((letter) => {
+		    return !this.activePhrase.regex.test(letter);
+		});
 
-        // this.currentPhrase = document.querySelectorAll(`#phrase li.show`)
-        console.log(this.currentPhrase)
-        console.log(this.currentPhrase.length, this.filteredPhrase.length)
-     
-        if (this.filteredPhrase.length - 1 === this.currentPhrase.length){
-            this.gameOver(true);
-        }
-    }
-    //reusable random
-    getRandomPhrase(list) {
-        return list[Math.floor(Math.random() * list.length)];
-    }
-    //remove li's & game over message
-    reset() {
-        this.active = true;
-        document.getElementById(`game-over-message`).textContent = '';
-        document.querySelectorAll(`li`).forEach(el => {
-            if(!el.classList.contains('tries')) {
-                el.classList.remove(`show`);
-                el.parentNode.removeChild(el);
-            } else {
-                document.querySelectorAll('.tries img').forEach(element => element.setAttribute(`src`, `images/liveHeart.png`));
-            }
-        });
-        [...document.getElementsByClassName(`key`)].forEach(button => {
-            button.className = `key`;
-        })
-    }
+		this.lis = [...document.getElementsByClassName(`show`)];
+		if (this.filteredPhrase.length === this.lis.length){
+		    return this.gameOver(true);
+		}
+	}
+	//reusable random
+	/**
+	 *
+	 * @param {object or array} list
+	 */
+	getRandomPhrase(list) {
+		return list[Math.floor(Math.random() * list.length)];
+	}
+	//remove li's & game over message
+	reset() {
+		this.active = true;
+		document.getElementById(`game-over-message`).textContent = '';
+		document.querySelectorAll(`li`).forEach(el => {
+			if(!el.classList.contains('tries')) {
+				el.classList.remove(`show`);
+				el.parentNode.removeChild(el);
+			} else {
+				document.querySelectorAll('.tries img').forEach(element => element.setAttribute(`src`, `images/liveHeart.png`));
+			}
+		});
+		[...document.getElementsByClassName(`key`)].forEach(button => {
+			button.className = `key`;
+		});
+	}
  }

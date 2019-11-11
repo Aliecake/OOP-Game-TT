@@ -22,17 +22,20 @@
        this.guessedLetters = [];
        this.correctGuess = false;
        this.active = true;
-       this.win = false;
     }
     //methods
     startGame() {
         overlayToggle();
         //rename activePhrase
         phrase.activePhrase = this.getRandomPhrase(this.phrases);
-        displayBoard(this);
+        phrase.addPhraseToDisplay();
     }
-    end() {
-        phrases.createElement(`div`, `lose`, `overlay`, `You Lost! Try again`, 3);
+    gameOver(result) {
+        if(result){
+            phrase.createElement(`div`, `win`, `overlay`, `You Won! Play again?`, 3);
+        } else {
+            phrase.createElement(`div`, `lose`, `overlay`, `You Lost! Play again?`, 3);
+        }
         //prevent overlay from toggling on keypress
         this.active = false;
         overlayToggle();
@@ -40,35 +43,36 @@
     handleInteraction(guess) {
         this.correctGuess = false;
         this.winCheck();
+        
         phrase.activePhrase.split('').forEach(letter => {
             if(guess.toLowerCase() === letter.toLowerCase()) {
                 this.correctGuess = true;
-                //correct guess highlighting
-                phrases.letterHighlight(letter);
+                //conjoined showMatchedLetter into both right/wrong guess highlighting AND phrase show
+                phrase.showMatchedLetter(letter, letter, `show`);
+                phrase.showMatchedLetter(letter, `key`, `chosen`);
             }
         });
-        this.killLife();
+
+        this.removeLife(guess);
     }
-    killLife() {
-        //remove a life
+    removeLife(guess) {
         if(!this.correctGuess && this.missed < 5) {
-            document.querySelectorAll('.tries img')[this.missed].setAttribute(`src`, `images/lostHeart.png`);
+            //removal of hearts from right to left
+            document.querySelectorAll('.tries img')[document.querySelectorAll('.tries img').length - this.missed - 1].setAttribute(`src`, `images/lostHeart.png`);
+
+            phrase.showMatchedLetter(guess, `key`, `wrong`);
             this.missed += 1;
         }
         if(this.missed === 5 && this.active) {
-            this.end();
+            this.gameOver(false);
         }
     }
     winCheck() {
         this.filteredPhrase = phrase.activePhrase.split('').filter((letter) => {
-            return !phrases.regex.test(letter);
+            return !phrase.regex.test(letter);
         });
-
-
         if (this.filteredPhrase.length - 1 === document.getElementsByClassName(`show`).length){
-            phrases.createElement(`div`, `win`, `overlay`, `You Won! Play again?`, 3);
-            this.active = false;
-            overlayToggle();
+            this.gameOver(true);
         }
     }
     //reusable random
@@ -87,5 +91,8 @@
                 document.querySelectorAll('.tries img').forEach(element => element.setAttribute(`src`, `images/liveHeart.png`));
             }
         });
+        [...document.getElementsByClassName(`key`)].forEach(button => {
+            button.className = `key`;
+        })
     }
  }

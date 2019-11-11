@@ -66,7 +66,7 @@
      * @param {string} char
      */
     //**NOTE: Below char default is its alt+255. Spaces are not valid tokens*/
-    // DOM element, _class, parent, textnode, nodenum, _class addition;
+    // DOM element, _class addition, parent, textnode, nodenum, optional _class addition;
    createElement(el, _class, parent, text, nodenum = 0, char = ` `) {
         this.node = document.createElement(`${el}`);
         this.textnode = document.createTextNode(text);

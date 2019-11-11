@@ -24,12 +24,10 @@
 	}
 
 	//***********METHODS**********//
-	
+
 	startGame() {
 		overlayToggle();
-		//rename activePhrase
 		this.activePhrase = this.getRandomPhrase(this.phrases);
-		console.log(this.activePhrase.phrase)
 		this.activePhrase.addPhraseToDisplay();
 	}
 	/**
@@ -38,9 +36,12 @@
 	 */
 	gameOver(gameWon) {
 		if(gameWon){
+			// DOM element, _class addition, parent, textnode, nodenum, optional _class addition;
 			this.activePhrase.createElement(`div`, `win`, `overlay`, `You Won! Play again?`, 3);
+			document.getElementById('overlay').classList.add(`win`);
 		} else {
 			this.activePhrase.createElement(`div`, `lose`, `overlay`, `You Lost! Play again?`, 3);
+			document.getElementById('overlay').classList.add(`lose`);
 		}
 		//prevent overlay from adding multiple win/loss messages on keypress between games
 		this.active = false;
@@ -100,6 +101,7 @@
 	reset() {
 		this.active = true;
 		document.getElementById(`game-over-message`).textContent = '';
+		document.getElementById(`overlay`).className = `start`;
 		document.querySelectorAll(`li`).forEach(el => {
 			if(!el.classList.contains('tries')) {
 				el.classList.remove(`show`);
